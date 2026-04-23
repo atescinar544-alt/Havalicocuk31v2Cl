@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "havaliclient",
+  "version": "${version}",
+  "name": "Havalicocuk31v2 Client",
+  "description": "Gelismis PvP Istemcisi",
+  "authors": [
+    "Sen"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/havaliclient/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.havali.client.Havalicocuk31v2Cl"
+    ],
+    "client": [
+      "com.havali.client.Havalicocuk31v2ClClient"
+    ]
+  },
+  "mixins": [
+    "havaliclient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
