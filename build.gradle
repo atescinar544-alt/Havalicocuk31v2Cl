@@ -34,12 +34,14 @@ processResources {
     }
 }
 
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archives_base_name}" }
-    }
-}
-
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
+}
+
+jar {
+    from("src/main/resources") {
+        include "fabric.mod.json"
+        include "havaliclient.mixins.json"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
