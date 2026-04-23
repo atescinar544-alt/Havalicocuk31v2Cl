@@ -4,9 +4,7 @@
   "version": "${version}",
   "name": "Havalicocuk31v2 Client",
   "description": "Gelismis PvP Istemcisi",
-  "authors": [
-    "Sen"
-  ],
+  "authors": ["Sen"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/havaliclient/icon.png",
