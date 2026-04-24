@@ -14,13 +14,11 @@ public class ArmorHudModule extends Module {
     }
 
     @Override
-    public void onRender(DrawContext context) {
+    public void onRender(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
-        
         int renderY = this.y;
         DefaultedList<ItemStack> armor = client.player.getInventory().armor;
-        
         for (int i = 3; i >= 0; i--) {
             ItemStack stack = armor.get(i);
             if (!stack.isEmpty()) {
