@@ -13,7 +13,6 @@ public class ModuleManager {
         modules.add(new CpsHudModule());
         modules.add(new FogModule());
         modules.add(new HitColorModule());
-        modules.add(new ViewmodelModule());
         modules.add(new FpsHudModule());
     }
 
