@@ -14,7 +14,7 @@ public class FpsHudModule extends Module {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.textRenderer != null) {
             String fpsText = "FPS: " + client.getCurrentFps();
-            context.drawTextWithShadow(client.textRenderer, fpsText, 5, 5, 0x00FF00);
+            context.drawTextWithShadow(client.textRenderer, fpsText, x, y, 0x00FF00);
         }
     }
 }
