@@ -33,7 +33,7 @@ public class Havalicocuk31v2ClClient implements ClientModInitializer {
 
         HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
             for (Module module : ModuleManager.INSTANCE.getModules()) {
-                if (module.isToggled()) {
+                if (module.toggled) {
                     module.onRender(drawContext, tickDelta);
                 }
             }
