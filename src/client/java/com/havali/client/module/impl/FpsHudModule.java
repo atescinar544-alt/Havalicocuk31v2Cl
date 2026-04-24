@@ -22,7 +22,7 @@ public class FpsHudModule extends Module {
             String text = "FPS: " + client.getCurrentFps();
             if (background.isEnabled()) {
                 context.fill(x, y, x + 60, y + 16, 0x90101010); 
-                context.fill(x, y, x + 2, y + 16, color.getColor()); // Kenar Çizgisi
+                context.fill(x, y, x + 2, y + 16, color.getColor());
             }
             context.drawTextWithShadow(client.textRenderer, text, x + 6, y + 4, 0xFFFFFF);
         }
