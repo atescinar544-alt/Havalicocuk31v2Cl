@@ -2,23 +2,30 @@ package com.havali.client.mixin;
 
 import com.havali.client.module.ModuleManager;
 import com.havali.client.module.impl.HitColorModule;
+import com.havali.client.module.settings.ColorSetting;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntityRenderer.class)
 public class HitColorMixin {
-    @Inject(method = "getOverlay", at = @At("HEAD"), cancellable = true)
-    private static void onGetOverlay(LivingEntity entity, float whiteIntensity, CallbackInfoReturnable<Integer> cir) {
+    
+    @Inject(method = "render*", at = @At("HEAD"))
+    private void onRenderHead(LivingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         HitColorModule mod = (HitColorModule) ModuleManager.INSTANCE.getModule("HitColor");
-        if (mod.toggled && entity.hurtTime > 0) {
-            int r = (int)(HitColorModule.red.getValue() * 255);
-            int g = (int)(HitColorModule.green.getValue() * 255);
-            int b = (int)(HitColorModule.blue.getValue() * 255);
-            cir.setReturnValue((10 << 24) | (b << 16) | (g << 8) | r);
+        if (mod != null && mod.toggled && entity.hurtTime > 0) {
+            ColorSetting c = HitColorModule.color;
+            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(c.r / 255f, c.g / 255f, c.b / 255f, 1.0f);
         }
+    }
+
+    @Inject(method = "render*", at = @At("TAIL"))
+    private void onRenderTail(LivingEntity entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
+        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }
