@@ -1,31 +1,24 @@
 package com.havali.client.module;
 
+import com.havali.client.module.settings.Setting;
 import net.minecraft.client.gui.DrawContext;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Module {
-    private final String name;
-    private boolean toggled;
+    public String name;
+    public boolean toggled;
+    public int x = 10, y = 10;
+    public List<Setting> settings = new ArrayList<>();
 
-    public Module(String name) {
-        this.name = name;
-        this.toggled = false;
-    }
-
-    public String getName() { return name; }
-    public boolean isToggled() { return toggled; }
-
+    public Module(String name) { this.name = name; }
+    public void addSettings(Setting... settings) { this.settings.addAll(List.of(settings)); }
     public void toggle() {
-        this.toggled = !this.toggled;
-        if (this.toggled) onEnable();
-        else onDisable();
+        toggled = !toggled;
+        if (toggled) onEnable(); else onDisable();
     }
-
-    public void setToggled(boolean toggled) {
-        this.toggled = toggled;
-    }
-
     public void onEnable() {}
     public void onDisable() {}
     public void onTick() {}
-    public void onRender(DrawContext context, float tickDelta) {}
+    public void onRender(DrawContext context) {}
 }
