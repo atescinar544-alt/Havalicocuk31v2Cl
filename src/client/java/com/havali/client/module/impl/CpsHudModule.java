@@ -19,7 +19,7 @@ public class CpsHudModule extends Module {
     public CpsHudModule() {
         super("CpsHud");
         addSettings(background, color);
-        this.y = 30; // Fps hudun biraz altında başlasın
+        this.y = 30;
     }
 
     @Override
@@ -27,7 +27,6 @@ public class CpsHudModule extends Module {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getWindow() == null) return;
         
-        // Vuruşu engellememek için farenin fiziksel tuşunu direkt okuyoruz
         boolean isDown = GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS;
         if (isDown && !wasDown) clicks.add(System.currentTimeMillis());
         wasDown = isDown;
@@ -41,8 +40,8 @@ public class CpsHudModule extends Module {
         String text = clicks.size() + " CPS";
         
         if (background.isEnabled()) {
-            context.fill(x, y, x + 55, y + 16, 0x90101010); // Premium Koyu Arkaplan
-            context.fill(x, y, x + 2, y + 16, color.getColor()); // Sol Tema Çizgisi
+            context.fill(x, y, x + 55, y + 16, 0x90101010);
+            context.fill(x, y, x + 2, y + 16, color.getColor());
         }
         context.drawTextWithShadow(client.textRenderer, text, x + 6, y + 4, 0xFFFFFF);
     }
