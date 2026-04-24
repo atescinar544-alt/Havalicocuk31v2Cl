@@ -15,12 +15,11 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, width, height, 0x80000000); // Daha soft arkaplan
+        context.fill(0, 0, width, height, 0x80000000);
         
-        // Modül Listesi
         int y = 40;
         context.fill(45, 30, 155, height - 40, 0x90101010);
-        context.drawTextWithShadow(textRenderer, "Modüller", 55, 15, 0x00FFCC);
+        context.drawTextWithShadow(textRenderer, "Moduller", 55, 15, 0x00FFCC);
         
         for (Module mod : ModuleManager.INSTANCE.getModules()) {
             int color = mod.toggled ? 0x00FF00 : 0xAAAAAA;
@@ -29,11 +28,10 @@ public class ClickGUI extends Screen {
             y += 20;
         }
 
-        // Ayar Paneli
         if (selectedModule != null) {
             int sY = 40;
             context.fill(160, 30, 320, height - 40, 0x90101010);
-            context.drawTextWithShadow(textRenderer, selectedModule.name + " Ayarları", 165, 15, 0x00FFCC);
+            context.drawTextWithShadow(textRenderer, selectedModule.name + " Ayarlari", 165, 15, 0x00FFCC);
             
             for (Setting s : selectedModule.settings) {
                 context.drawTextWithShadow(textRenderer, s.name, 165, sY, 0xFFFFFF);
@@ -43,14 +41,14 @@ public class ClickGUI extends Screen {
                 } 
                 else if (s instanceof NumberSetting ns) {
                     float percent = (float) ((ns.value - ns.min) / (ns.max - ns.min));
-                    context.fill(165, sY + 12, 305, sY + 14, 0xFF555555); // Slider arkaplan
-                    context.fill(165, sY + 12, 165 + (int)(140 * percent), sY + 14, 0xFF00FFCC); // Slider dolgu
+                    context.fill(165, sY + 12, 305, sY + 14, 0xFF555555);
+                    context.fill(165, sY + 12, 165 + (int)(140 * percent), sY + 14, 0xFF00FFCC);
                     context.drawTextWithShadow(textRenderer, String.format("%.1f", ns.value), 280, sY, 0xAAAAAA);
                     sY += 10;
                 }
                 else if (s instanceof ColorSetting cs) {
-                    context.fill(295, sY, 305, sY + 10, 0xFF888888); // Gri Kare
-                    context.fill(296, sY + 1, 304, sY + 9, cs.getColor()); // İç renk
+                    context.fill(295, sY, 305, sY + 10, 0xFF888888);
+                    context.fill(296, sY + 1, 304, sY + 9, cs.getColor());
                     
                     if (cs.expanded) {
                         sY += 15;
@@ -113,9 +111,7 @@ public class ClickGUI extends Screen {
                 float percent = (float) Math.max(0, Math.min(1, (mouseX - 165) / 140.0f));
                 ns.setValue(ns.min + (ns.max - ns.min) * percent);
             } else if (draggingSetting instanceof ColorSetting cs && cs.expanded) {
-                // Hangi renk slider'ında olduğunu tahmin etme (Basit mantık)
                 int val = (int) (255 * Math.max(0, Math.min(1, (mouseX - 180) / 125.0f)));
-                // Sadece sürüklendiğinde en yakın rengi günceller (Pratik çözüm)
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
@@ -126,5 +122,4 @@ public class ClickGUI extends Screen {
         draggingSetting = null;
         return super.mouseReleased(mouseX, mouseY, button);
     }
-            }
-                    
+    }
