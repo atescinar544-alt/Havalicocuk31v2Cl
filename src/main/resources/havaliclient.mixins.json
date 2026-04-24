@@ -6,8 +6,7 @@
   "mixins": [
     "ClientTickMixin",
     "FogMixin",
-    "HitColorMixin",
-    "ViewmodelMixin"
+    "HitColorMixin"
   ],
   "client": [],
   "injectors": {
