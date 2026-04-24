@@ -15,10 +15,11 @@ public class FogMixin {
     @Inject(method = "applyFog", at = @At("TAIL"))
     private static void onApplyFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
         FogModule mod = (FogModule) ModuleManager.INSTANCE.getModule("Fog");
-        if (mod.toggled) {
+        if (mod != null && mod.toggled) {
+            float dens = FogModule.density.getValueFloat();
             RenderSystem.setShaderFogStart(0f);
-            RenderSystem.setShaderFogEnd(viewDistance * (1.1f - FogModule.density.getValueFloat()));
-            RenderSystem.setShaderFogColor(FogModule.red.getValueFloat(), FogModule.green.getValueFloat(), FogModule.blue.getValueFloat());
+            RenderSystem.setShaderFogEnd(viewDistance / (dens > 0 ? dens : 1f));
+            RenderSystem.setShaderFogColor(FogModule.color.r / 255f, FogModule.color.g / 255f, FogModule.color.b / 255f);
         }
     }
 }
