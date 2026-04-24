@@ -13,7 +13,7 @@ public class ClientTickMixin {
     @Inject(at = @At("HEAD"), method = "tick")
     private void onTick(CallbackInfo info) {
         for (Module module : ModuleManager.INSTANCE.getModules()) {
-            if (module.isToggled()) {
+            if (module.toggled) {
                 module.onTick();
             }
         }
