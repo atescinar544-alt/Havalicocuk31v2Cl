@@ -26,11 +26,11 @@ public class CpsHudModule extends Module {
     }
 
     @Override
-    public void onRender(DrawContext context) {
+    public void onRender(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         String text = clicks.size() + " CPS";
         if (background.isEnabled()) {
-            context.fill(x, y, x + 40, y + 15, 0x90000000);
+            context.fill(x, y, x + 45, y + 15, 0x90000000);
         }
         context.drawTextWithShadow(client.textRenderer, text, x + 5, y + 4, 0xFFFFFF);
     }
