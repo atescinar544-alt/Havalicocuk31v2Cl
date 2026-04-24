@@ -20,5 +20,5 @@ public abstract class Module {
     public void onEnable() {}
     public void onDisable() {}
     public void onTick() {}
-    public void onRender(DrawContext context) {}
+    public void onRender(DrawContext context, float tickDelta) {}
 }
