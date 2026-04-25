@@ -10,15 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CpsHudModule extends Module {
-    private final List<Long> clicks = new ArrayList<>();
-    private boolean wasDown = false;
-    
+    private final List<Long> leftClicks = new ArrayList<>();
+    private final List<Long> rightClicks = new ArrayList<>();
+    private boolean wasLeftDown = false;
+    private boolean wasRightDown = false;
+
+    public BooleanSetting showRight = new BooleanSetting("Sag Tik CPS", false);
     public BooleanSetting background = new BooleanSetting("Arkaplan", true);
-    public ColorSetting color = new ColorSetting("Tema Rengi", 0, 255, 204);
+    public ColorSetting textColor = new ColorSetting("Yazi Rengi", 0.0f, 0.0f, 1.0f);
 
     public CpsHudModule() {
         super("CpsHud");
-        addSettings(background, color);
+        addSettings(showRight, background, textColor);
         this.y = 30;
     }
 
@@ -26,23 +29,35 @@ public class CpsHudModule extends Module {
     public void onTick() {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getWindow() == null) return;
-        
-        boolean isDown = GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS;
-        if (isDown && !wasDown) clicks.add(System.currentTimeMillis());
-        wasDown = isDown;
-        
-        clicks.removeIf(time -> System.currentTimeMillis() - time > 1000);
+
+        long time = System.currentTimeMillis();
+
+        boolean isLeftDown = GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS;
+        if (isLeftDown && !wasLeftDown) leftClicks.add(time);
+        wasLeftDown = isLeftDown;
+        leftClicks.removeIf(t -> time - t > 1000);
+
+        boolean isRightDown = GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_2) == GLFW.GLFW_PRESS;
+        if (isRightDown && !wasRightDown) rightClicks.add(time);
+        wasRightDown = isRightDown;
+        rightClicks.removeIf(t -> time - t > 1000);
     }
 
     @Override
     public void onRender(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        String text = clicks.size() + " CPS";
-        
+        String text = showRight.isEnabled() ? leftClicks.size() + " | " + rightClicks.size() + " CPS" : leftClicks.size() + " CPS";
+
+        context.getMatrices().push();
+        context.getMatrices().translate(x, y, 0);
+        context.getMatrices().scale(scale.getValueFloat(), scale.getValueFloat(), 1.0f);
+
         if (background.isEnabled()) {
-            context.fill(x, y, x + 55, y + 16, 0x90101010);
-            context.fill(x, y, x + 2, y + 16, color.getColor());
+            int width = client.textRenderer.getWidth(text) + 8;
+            context.fill(0, 0, width, 14, 0x90000000);
         }
-        context.drawTextWithShadow(client.textRenderer, text, x + 6, y + 4, 0xFFFFFF);
+
+        context.drawTextWithShadow(client.textRenderer, text, 4, 3, textColor.getColor());
+        context.getMatrices().pop();
     }
 }
