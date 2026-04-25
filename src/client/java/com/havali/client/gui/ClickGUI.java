@@ -1,8 +1,12 @@
 package com.havali.client.gui;
 
+import com.havali.client.Config;
 import com.havali.client.module.Module;
 import com.havali.client.module.ModuleManager;
-import com.havali.client.module.settings.*;
+import com.havali.client.module.settings.BooleanSetting;
+import com.havali.client.module.settings.ColorSetting;
+import com.havali.client.module.settings.NumberSetting;
+import com.havali.client.module.settings.Setting;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -57,22 +61,23 @@ public class ClickGUI extends Screen {
                     if (cs.expanded) {
                         int boxSize = 60;
                         int hueWidth = 10;
+                        int step = 3;
                         
-                        for (int i = 0; i < boxSize; i++) {
-                            for (int j = 0; j < boxSize; j++) {
+                        for (int i = 0; i < boxSize; i += step) {
+                            for (int j = 0; j < boxSize; j += step) {
                                 float sat = i / (float) boxSize;
                                 float bri = 1.0f - (j / (float) boxSize);
                                 ColorSetting temp = new ColorSetting("", cs.hue, sat, bri);
-                                context.fill(180 + i, sY + j, 180 + i + 1, sY + j + 1, temp.getColor());
+                                context.fill(180 + i, sY + j, 180 + i + step, sY + j + step, temp.getColor());
                             }
                         }
                         
                         context.fill(180 + (int)(cs.saturation * boxSize) - 1, sY + (int)((1.0f - cs.brightness) * boxSize) - 1, 180 + (int)(cs.saturation * boxSize) + 1, sY + (int)((1.0f - cs.brightness) * boxSize) + 1, 0xFFFFFFFF);
 
-                        for (int j = 0; j < boxSize; j++) {
+                        for (int j = 0; j < boxSize; j += 2) {
                             float h = j / (float) boxSize;
                             ColorSetting temp = new ColorSetting("", h, 1.0f, 1.0f);
-                            context.fill(245, sY + j, 245 + hueWidth, sY + j + 1, temp.getColor());
+                            context.fill(245, sY + j, 245 + hueWidth, sY + j + 2, temp.getColor());
                         }
                         
                         context.fill(243, sY + (int)(cs.hue * boxSize) - 1, 245 + hueWidth + 2, sY + (int)(cs.hue * boxSize) + 1, 0xFFFFFFFF);
@@ -95,6 +100,7 @@ public class ClickGUI extends Screen {
             if (mouseX >= 25 && mouseX <= 155 && mouseY >= modY && mouseY <= modY + 16) {
                 if (button == 0) mod.toggle();
                 if (button == 1) selectedModule = mod;
+                Config.save();
                 return true;
             }
             modY += 20;
@@ -111,6 +117,7 @@ public class ClickGUI extends Screen {
                 if (s instanceof BooleanSetting bs) {
                     if (mouseX >= 180 && mouseX <= 340 && mouseY >= sY && mouseY <= sY + 15) {
                         bs.setEnabled(!bs.isEnabled());
+                        Config.save();
                     }
                     sY += 20;
                 } else if (s instanceof NumberSetting) {
@@ -147,9 +154,11 @@ public class ClickGUI extends Screen {
         } else if (draggingSetting instanceof ColorSetting cs) {
             int sY = 55;
             for (Setting s : selectedModule.settings) {
-                if (s instanceof BooleanSetting) sY += 20;
-                else if (s instanceof NumberSetting) sY += 25;
-                else if (s instanceof ColorSetting currentCs) {
+                if (s instanceof BooleanSetting) {
+                    sY += 20;
+                } else if (s instanceof NumberSetting) {
+                    sY += 25;
+                } else if (s instanceof ColorSetting currentCs) {
                     sY += 15;
                     if (currentCs.expanded) {
                         if (currentCs == cs) {
@@ -171,8 +180,10 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (draggingSetting != null) Config.save();
         draggingSetting = null;
         colorDragType = 0;
         return super.mouseReleased(mouseX, mouseY, button);
     }
-                                    }
+                                                                 }
+                                    
