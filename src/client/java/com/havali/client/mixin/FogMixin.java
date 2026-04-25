@@ -19,7 +19,11 @@ public class FogMixin {
             float dens = FogModule.density.getValueFloat();
             RenderSystem.setShaderFogStart(0f);
             RenderSystem.setShaderFogEnd(viewDistance / (dens > 0 ? dens : 1f));
-            RenderSystem.setShaderFogColor(FogModule.color.r / 255f, FogModule.color.g / 255f, FogModule.color.b / 255f);
+            int color = FogModule.color.getColor();
+            float r = ((color >> 16) & 0xFF) / 255.0f;
+            float g = ((color >> 8) & 0xFF) / 255.0f;
+            float b = (color & 0xFF) / 255.0f;
+            RenderSystem.setShaderFogColor(r, g, b);
         }
     }
 }
