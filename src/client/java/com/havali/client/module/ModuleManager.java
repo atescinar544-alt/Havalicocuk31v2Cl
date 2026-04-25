@@ -13,7 +13,7 @@ public class ModuleManager {
         modules.add(new CpsHudModule());
         modules.add(new ArmorHudModule());
         modules.add(new KeystrokesModule());
-        modules.add(new HitColorModule());
+        modules.add(new ItemSwayModule());
         modules.add(new FogModule());
     }
 
