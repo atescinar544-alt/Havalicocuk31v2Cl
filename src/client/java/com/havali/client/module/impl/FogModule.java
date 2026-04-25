@@ -6,7 +6,7 @@ import com.havali.client.module.settings.NumberSetting;
 
 public class FogModule extends Module {
     public static NumberSetting density = new NumberSetting("Yogunluk", 10.0, 0.0, 100.0);
-    public static ColorSetting color = new ColorSetting("Sis Rengi", 150, 0, 255);
+    public static ColorSetting color = new ColorSetting("Sis Rengi", 0.8f, 1.0f, 1.0f);
 
     public FogModule() {
         super("Fog");
