@@ -20,7 +20,11 @@ public class HitColorMixin {
         HitColorModule mod = (HitColorModule) ModuleManager.INSTANCE.getModule("HitColor");
         if (mod != null && mod.toggled && entity.hurtTime > 0) {
             ColorSetting c = HitColorModule.color;
-            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(c.r / 255f, c.g / 255f, c.b / 255f, 1.0f);
+            int color = c.getColor();
+            float r = ((color >> 16) & 0xFF) / 255.0f;
+            float green = ((color >> 8) & 0xFF) / 255.0f;
+            float b = (color & 0xFF) / 255.0f;
+            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(r, green, b, 1.0f);
         }
     }
 
